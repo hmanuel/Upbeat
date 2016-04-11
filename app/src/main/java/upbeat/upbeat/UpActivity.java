@@ -21,7 +21,7 @@ public class UpActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.songs_list);
 
-        SongSingleton s = SongSingleton.get(getApplicationContext());
+        final SongSingleton s = SongSingleton.get(getApplicationContext());
         mSongs = s.getSongs();
 
         mAdapter = new SongAdapter(this, mSongs);
@@ -32,9 +32,26 @@ public class UpActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Song song;
                 song = SongSingleton.get(getApplicationContext()).getSong(position);
-                song.setUpbeats(song.getUpbeats()+1);
+                song.setUpbeats(song.getUpbeats() + 1);
                 mAdapter.notifyDataSetChanged();
+                if(position > 0)
+                    sort(song, position, s);
             }
         });
     }
+
+    public void sort(Song song, int position, SongSingleton s) {
+        Song song2 = SongSingleton.get(getApplicationContext()).getSong(position-1);
+        while (song.getUpbeats()>song2.getUpbeats()) {
+            s.updateSong(position-1, song);
+            s.updateSong(position, song2);
+            position = position - 1;
+            if (position - 1 >= 0)
+                song2 = SongSingleton.get(getApplicationContext()).getSong(position-1);
+            else
+                break;
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
 }
