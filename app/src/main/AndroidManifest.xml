@@ -9,6 +9,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".UpActivity">
+
+        </activity>
+        <activity
+            android:name=".PlaySongActivity"
+            android:label="@string/title_activity_play_song"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
