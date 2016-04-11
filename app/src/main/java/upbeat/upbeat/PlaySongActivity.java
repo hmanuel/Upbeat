@@ -15,8 +15,9 @@ import android.widget.Toast;
 public class PlaySongActivity extends AppCompatActivity {
 
     Button playAnacondaButton;
-    Button otherButton;
     Button humpsButton;
+    Button otherButton;
+    Button fatherButton;
     MediaPlayer mediaPlayer;
     MediaPlayer.OnCompletionListener doneListener;
 
@@ -27,8 +28,9 @@ public class PlaySongActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_song);
 
         playAnacondaButton = (Button) findViewById(R.id.button0);
-        otherButton = (Button) findViewById(R.id.button1);
-        humpsButton = (Button) findViewById(R.id.button2);
+        humpsButton = (Button) findViewById(R.id.button1);
+        otherButton = (Button) findViewById(R.id.button2);
+        fatherButton= (Button) findViewById(R.id.button3);
         mediaPlayer = new MediaPlayer();
         doneListener = new MediaPlayer.OnCompletionListener() {
 
@@ -36,24 +38,16 @@ public class PlaySongActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
             }
         };
+        mediaPlayer.setOnCompletionListener(doneListener);
 
         playAnacondaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw._3005);
                 mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(doneListener);
             }
         }
         );
-
-        otherButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UpActivity.class);
-                startActivity(intent);
-            }
-        });
 
         humpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +57,21 @@ public class PlaySongActivity extends AppCompatActivity {
             }
         });
 
+        otherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UpActivity.class);
+                startActivity(intent);
+            }
+        });
 
-
-
+        fatherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.father_short);
+                mediaPlayer.start();
+            }
+        });
     }
 
 }
