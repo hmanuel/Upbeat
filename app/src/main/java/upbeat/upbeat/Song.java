@@ -18,6 +18,11 @@ public class Song {
 
     //public int getSongID() { return ; }
 
+
+    public void setSongID(int songID) {
+        this.songID = songID;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

@@ -3,11 +3,7 @@ package upbeat.upbeat;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -43,7 +39,7 @@ public class PlaySongActivity extends AppCompatActivity {
         playAnacondaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw._3005);
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.song1);
                 mediaPlayer.start();
             }
         }
@@ -52,7 +48,7 @@ public class PlaySongActivity extends AppCompatActivity {
         humpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.myhumps);
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.song3);
                 mediaPlayer.start();
             }
         });
@@ -68,7 +64,7 @@ public class PlaySongActivity extends AppCompatActivity {
         fatherButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.father_short);
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.song4);
                 mediaPlayer.start();
             }
         });
