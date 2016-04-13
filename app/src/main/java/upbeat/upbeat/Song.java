@@ -16,8 +16,7 @@ public class Song {
         return upbeats;
     }
 
-    //public int getSongID() { return ; }
-
+    public int getSongID() { return songID; }
 
     public void setSongID(int songID) {
         this.songID = songID;
