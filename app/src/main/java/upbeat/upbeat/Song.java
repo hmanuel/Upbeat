@@ -5,6 +5,7 @@ package upbeat.upbeat;
  */
 public class Song {
     private String title;
+    private int songID;
     private int upbeats;
 
     public String getTitle() {
@@ -14,6 +15,8 @@ public class Song {
     public int getUpbeats() {
         return upbeats;
     }
+
+    //public int getSongID() { return ; }
 
     public void setTitle(String title) {
         this.title = title;

@@ -1,10 +1,12 @@
 package upbeat.upbeat;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,9 @@ public class UpActivity extends AppCompatActivity {
     ListView mListView;
     ArrayList<Song> mSongs;
     SongAdapter mAdapter;
+
+    MediaPlayer mediaPlayer;
+    MediaPlayer.OnCompletionListener doneListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,16 @@ public class UpActivity extends AppCompatActivity {
                     sort(song, position, s);
             }
         });
+
+        mediaPlayer = new MediaPlayer();
+        doneListener = new MediaPlayer.OnCompletionListener() {
+
+            public void onCompletion(MediaPlayer mp) {
+                Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
+                //start playing the top song
+            }
+        };
+        mediaPlayer.setOnCompletionListener(doneListener);
     }
 
     public void sort(Song song, int position, SongSingleton s) {
