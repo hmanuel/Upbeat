@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Upbeat</string>
     <string name="title_activity_play_song">PlaySongActivity</string>
+    <string name="title_activity_splash_screen">SplashActivity</string>
 </resources>
