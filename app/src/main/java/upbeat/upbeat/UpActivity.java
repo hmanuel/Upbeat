@@ -96,11 +96,15 @@ public class UpActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
                 // remove top song from list
                 s.removeSong(0);
+                playButton.setImageDrawable(
+                        getDrawable(R.drawable.ic_play_arrow_white_48px));
                 //start playing the top song
                 if (s.getSongIDS().size() > 0) {
                     Song playNow = SongSingleton.get(getApplicationContext()).getSong(0);
                     mediaPlayer = MediaPlayer.create(getApplicationContext(), playNow.getSongID());
                     mediaPlayer.start();
+                    playButton.setImageDrawable(
+                            getDrawable(R.drawable.ic_pause_white_48px));
                     // this needs to be here to play through each song
                     mediaPlayer.setOnCompletionListener(doneListener);
                     mAdapter.notifyDataSetChanged();
