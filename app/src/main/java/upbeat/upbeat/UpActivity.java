@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -41,6 +42,8 @@ public class UpActivity extends AppCompatActivity {
         try {
             s.populateSongIDS();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         mSongs = s.getSongs();
@@ -104,7 +107,6 @@ public class UpActivity extends AppCompatActivity {
                 }
             }
         };
-
     }
 
     /*private void populateSongIDS() throws IllegalAccessException {

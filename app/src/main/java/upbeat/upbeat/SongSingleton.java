@@ -1,8 +1,10 @@
 package upbeat.upbeat;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Log;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -57,11 +59,12 @@ public class SongSingleton {
         }
     }
 
-    public void populateSongIDS() throws IllegalAccessException {
+    public void populateSongIDS() throws IllegalAccessException, IOException {
         int song_id;
         String songName;
-        Field[] fields=R.raw.class.getFields();
-        for(int i=0; i < fields.length; i++){
+        //AssetManager assetManager = mAppContext.getResources().getAssets();
+        Field[] fields = R.raw.class.getFields();
+        for(int i=0; i < fields.length-1; i++){ //because Fields has an extraneous field
             //i + 1 because it was put in like song1, song2.... can't believe this was the prob lol
             songName = "song" + (i+1);
             song_id = mAppContext.getResources().getIdentifier(songName, "raw", mAppContext.getPackageName());
