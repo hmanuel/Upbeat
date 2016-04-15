@@ -48,6 +48,8 @@ public class UpActivity extends AppCompatActivity {
 
         mAdapter = new SongAdapter(this, mSongs);
         mListView.setAdapter(mAdapter);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSongIDS().get(0));
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,19 +68,21 @@ public class UpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
                     if (!firstSongStarted) {
-                        mediaPlayer = new MediaPlayer();
-                        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSongIDS().get(0));
                         mediaPlayer.start();
                         mediaPlayer.setOnCompletionListener(doneListener);
                         firstSongStarted = true;
+                        playButton.setImageDrawable(
+                                getDrawable(R.drawable.ic_pause_white_48px));
                     } else {
                         mediaPlayer.seekTo(songPosition);
                         mediaPlayer.start();
+                        playButton.setImageDrawable(
+                                getDrawable(R.drawable.ic_pause_white_48px));
                     }
                 } else if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     songPosition = mediaPlayer.getCurrentPosition();
-                    playButton.setBackgroundDrawable(getDrawable(R.drawable.ic_play_arrow_white_48px));
+                    playButton.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_white_48px));
                 }
             }
         });

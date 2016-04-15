@@ -3,7 +3,6 @@ package upbeat.upbeat;
 import android.content.Context;
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -12,14 +11,16 @@ import java.util.ArrayList;
  */
 public class SongSingleton {
     private ArrayList<Song> mSongs;
-    private ArrayList<Integer> msongIDS;
+    private ArrayList<Integer> mSongIDS;
     private Context mAppContext;
     private static SongSingleton sSongs;
+
+    public static final String TAG = UpActivity.class.getSimpleName();
 
     private SongSingleton (Context c) {
         mAppContext = c;
         mSongs = new ArrayList<>();
-        msongIDS = new ArrayList<>(); // temporary fix. bad practice to have ids separate
+        mSongIDS = new ArrayList<>(); // temporary fix. bad practice to have ids separate
         for (int i=1; i<=20; i++) {
             Song song = new Song();
             song.setTitle("Song " + i);
@@ -40,14 +41,14 @@ public class SongSingleton {
     public Song getSong(int index) {
         return mSongs.get(index);
     }
-    public ArrayList<Integer> getSongIDS() {return msongIDS;}
+    public ArrayList<Integer> getSongIDS() {return mSongIDS;}
     public void addSong(Song song) {
         mSongs.add(song);
     }
 
     public void removeSong(int position) {
         mSongs.remove(position);
-        msongIDS.remove(position);
+        mSongIDS.remove(position);
     }
 
     public void updateSong(int position, Song song) {
@@ -58,11 +59,14 @@ public class SongSingleton {
 
     public void populateSongIDS() throws IllegalAccessException {
         int song_id;
+        String songName;
         Field[] fields=R.raw.class.getFields();
         for(int i=0; i < fields.length; i++){
-            msongIDS.add(fields[i].getInt(fields[i]));
-            song_id = fields[i].getInt(fields[i]);
-            //Log.d(TAG, "Song ID: " + String.valueOf(songIDS.get(i)));
+            //i + 1 because it was put in like song1, song2.... can't believe this was the prob lol
+            songName = "song" + (i+1);
+            song_id = mAppContext.getResources().getIdentifier(songName, "raw", mAppContext.getPackageName());
+            mSongIDS.add(song_id);
+            Log.d(TAG, "Song ID: " + String.valueOf(mSongIDS.get(i)));
             mSongs.get(i).setSongID(song_id);
         }
     }
