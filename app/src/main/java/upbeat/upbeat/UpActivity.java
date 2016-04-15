@@ -78,6 +78,7 @@ public class UpActivity extends AppCompatActivity {
                 } else if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     songPosition = mediaPlayer.getCurrentPosition();
+                    playButton.setBackgroundDrawable(getDrawable(R.drawable.ic_play_arrow_white_48px));
                 }
             }
         });
