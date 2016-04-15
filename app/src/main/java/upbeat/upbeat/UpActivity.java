@@ -70,6 +70,7 @@ public class UpActivity extends AppCompatActivity {
                     mediaPlayer.start();
                     // this needs to be here to play through each song
                     mediaPlayer.setOnCompletionListener(doneListener);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         };
