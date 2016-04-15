@@ -1,6 +1,7 @@
 package upbeat.upbeat;
 
 import android.media.MediaPlayer;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,12 +17,16 @@ public class UpActivity extends AppCompatActivity {
 
     public static final String TAG = UpActivity.class.getSimpleName();
     ListView mListView;
+    FloatingActionButton playButton;
+
     ArrayList<Song> mSongs;
     ArrayList<Integer> songIDS;
     SongAdapter mAdapter;
 
     MediaPlayer mediaPlayer;
     MediaPlayer.OnCompletionListener doneListener;
+    boolean firstSongStarted;
+    int songPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,8 @@ public class UpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_up);
 
         mListView = (ListView) findViewById(R.id.songs_list);
+        playButton = (FloatingActionButton) findViewById(R.id.play_button);
+        firstSongStarted = false;
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
         try {
@@ -54,9 +61,27 @@ public class UpActivity extends AppCompatActivity {
             }
         });
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSongIDS().get(0));
-        mediaPlayer.start();
+        playButton.setOnClickListener(new View.OnClickListener() { //only starts it, doesn't play / pause
+            @Override
+            public void onClick(View v) {
+                if (!mediaPlayer.isPlaying()) {
+                    if (!firstSongStarted) {
+                        mediaPlayer = new MediaPlayer();
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSongIDS().get(0));
+                        mediaPlayer.start();
+                        mediaPlayer.setOnCompletionListener(doneListener);
+                        firstSongStarted = true;
+                    } else {
+                        mediaPlayer.seekTo(songPosition);
+                        mediaPlayer.start();
+                    }
+                } else if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    songPosition = mediaPlayer.getCurrentPosition();
+                }
+            }
+        });
+
         doneListener = new MediaPlayer.OnCompletionListener() {
 
             public void onCompletion(MediaPlayer mp) {
@@ -74,7 +99,7 @@ public class UpActivity extends AppCompatActivity {
                 }
             }
         };
-        mediaPlayer.setOnCompletionListener(doneListener);
+
     }
 
     /*private void populateSongIDS() throws IllegalAccessException {
