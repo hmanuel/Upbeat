@@ -31,13 +31,13 @@ public class UpActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.songs_list);
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
-        mSongs = s.getSongs();
-        songIDS = new ArrayList<>();
         try {
-            populateSongIDS();
+            s.populateSongIDS();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        mSongs = s.getSongs();
+        songIDS = new ArrayList<>();
 
         mAdapter = new SongAdapter(this, mSongs);
         mListView.setAdapter(mAdapter);
@@ -55,7 +55,7 @@ public class UpActivity extends AppCompatActivity {
         });
 
         mediaPlayer = new MediaPlayer();
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), songIDS.get(0));
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSongIDS().get(0));
         mediaPlayer.start();
         doneListener = new MediaPlayer.OnCompletionListener() {
 
@@ -64,15 +64,19 @@ public class UpActivity extends AppCompatActivity {
                 // remove top song from list
                 s.removeSong(0);
                 //start playing the top song
-                Song playNow = SongSingleton.get(getApplicationContext()).getSong(0);
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), playNow.getSongID());
-                mediaPlayer.start();
+                if (s.getSongIDS().size() > 0) {
+                    Song playNow = SongSingleton.get(getApplicationContext()).getSong(0);
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), playNow.getSongID());
+                    mediaPlayer.start();
+                    // this needs to be here to play through each song
+                    mediaPlayer.setOnCompletionListener(doneListener);
+                }
             }
         };
         mediaPlayer.setOnCompletionListener(doneListener);
     }
 
-    private void populateSongIDS() throws IllegalAccessException {
+    /*private void populateSongIDS() throws IllegalAccessException {
         int song_id;
         Field[] fields=R.raw.class.getFields();
         for(int i=0; i < fields.length; i++){
@@ -81,7 +85,7 @@ public class UpActivity extends AppCompatActivity {
             Log.d(TAG, "Song ID: " + String.valueOf(songIDS.get(i)));
             mSongs.get(i).setSongID(song_id);
         }
-    }
+    }*/
 
     public void sort(Song song, int position, SongSingleton s) {
         Song song2 = SongSingleton.get(getApplicationContext()).getSong(position-1);
