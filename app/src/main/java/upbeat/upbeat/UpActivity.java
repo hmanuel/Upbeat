@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class UpActivity extends AppCompatActivity {
     public static final String TAG = UpActivity.class.getSimpleName();
     ListView mListView;
     FloatingActionButton playButton;
+    TextView currentSongTextView;
+    TextView currentArtistTextView;
 
     ArrayList<Song> mSongs;
     SongAdapter mAdapter;
@@ -36,6 +39,8 @@ public class UpActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.songs_list);
         playButton = (FloatingActionButton) findViewById(R.id.play_button);
         firstSongStarted = false;
+        currentSongTextView = (TextView) findViewById(R.id.current_song_textView);
+        currentArtistTextView = (TextView) findViewById(R.id.current_artist_textView);
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
 
@@ -68,6 +73,8 @@ public class UpActivity extends AppCompatActivity {
                         firstSongStarted = true;
                         playButton.setImageDrawable(
                                 getDrawable(R.drawable.ic_pause_white_48px));
+                        currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
+                        currentArtistTextView.setText(mSongs.get(0).getArtistName());
                     } else {
                         mediaPlayer.seekTo(songPosition);
                         mediaPlayer.start();
@@ -101,6 +108,8 @@ public class UpActivity extends AppCompatActivity {
                     // this needs to be here to play through each song
                     mediaPlayer.setOnCompletionListener(doneListener);
                     mAdapter.notifyDataSetChanged();
+                    currentSongTextView.setText(playNow.getFormattedTitle());
+                    currentArtistTextView.setText(playNow.getArtistName());
                 }
             }
         };

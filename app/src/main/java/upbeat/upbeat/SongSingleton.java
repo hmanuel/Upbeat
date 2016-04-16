@@ -23,11 +23,6 @@ public class SongSingleton {
         mAppContext = c;
         mSongs = new ArrayList<>();
         populateSongs();
-        /*for (int i=1; i<=20; i++) {
-            Song song = new Song();
-            song.setTitle("Song " + i); // we have a lead with fields.getname or something
-            mSongs.add(song);
-        }*/
     }
 
     private void populateSongs() {
@@ -37,17 +32,58 @@ public class SongSingleton {
         int tempSongID;
         int tempSongUpbeats = 0;
         String tempSongTitle;
+        String tempSongFormattedTitle;
+        String tempSongArtist;
         for (int i = 1; i < fields.length; i++) {
             Log.d(TAG, fields[i].getName());
             tempSong = new Song();
             tempSongTitle = fields[i].getName();
+            tempSongFormattedTitle = getReformattedTitle(tempSongTitle);
+            tempSongArtist = getArtistName(tempSongTitle);
             tempSongID = mAppContext.getResources()
                     .getIdentifier(tempSongTitle, "raw", mAppContext.getPackageName());
+
             tempSong.setSongID(tempSongID);
             tempSong.setTitle(tempSongTitle);
             tempSong.setUpbeats(tempSongUpbeats); // this is where the cloud does cloud things
+            tempSong.setFormattedTitle(tempSongFormattedTitle);
+            tempSong.setArtistName(tempSongArtist);
             mSongs.add(tempSong);
         }
+    }
+
+    private String getReformattedTitle(String tempSongTitle) {
+        String formatted = "";
+        if (tempSongTitle.equals("anaconda"))
+            formatted = "Anaconda";
+        if (tempSongTitle.equals("cocoabutterkisses"))
+            formatted = "Cocoa Butter Kisses";
+        if (tempSongTitle.equals("father"))
+            formatted = "Father Stretch My Hands Pt. 1";
+        if (tempSongTitle.equals("myhumps"))
+            formatted = "My Humps";
+        if (tempSongTitle.equals("threethousandfive"))
+            formatted = "3005";
+        if (tempSongTitle.equals("ultralight"))
+            formatted = "Ultralight Beam";
+        return formatted;
+    }
+
+    private String getArtistName(String tempSongTitle) {
+        String artist = "";
+        if (tempSongTitle.equals("anaconda"))
+            artist = "Nicki Minaj";
+        if (tempSongTitle.equals("cocoabutterkisses"))
+            artist = "Chance the Rapper";
+        if (tempSongTitle.equals("father"))
+            artist = "Kanye West";
+        if (tempSongTitle.equals("myhumps"))
+            artist = "The Black Eyed Peas";
+        if (tempSongTitle.equals("threethousandfive"))
+            artist = "Childish Gambino";
+        if (tempSongTitle.equals("ultralight"))
+            artist = "Kanye West";
+        return artist;
     }
 
     public static SongSingleton get (Context c) {
@@ -81,20 +117,4 @@ public class SongSingleton {
         }
     }
 
-    /*
-    public void populateSongIDS() throws IllegalAccessException, IOException {
-        int song_id;
-        String songName;
-        //AssetManager assetManager = mAppContext.getResources().getAssets();
-        Field[] fields = R.raw.class.getFields();
-        for(int i=0; i < fields.length-1; i++){ //because Fields has an extraneous field
-            //i + 1 because it was put in like song1, Anaconda.... can't believe this was the prob lol
-            songName = "song" + (i+1);
-            song_id = mAppContext.getResources().getIdentifier(songName, "raw", mAppContext.getPackageName());
-            mSongIDS.add(song_id);
-            Log.d(TAG, "Song ID: " + String.valueOf(mSongIDS.get(i)));
-            mSongs.get(i).setSongID(song_id);
-        }
-    }
-    */
 }

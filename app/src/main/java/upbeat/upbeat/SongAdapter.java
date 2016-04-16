@@ -29,7 +29,7 @@ public class SongAdapter extends ArrayAdapter<Song> {
         TextView songTitle = (TextView) convertView.findViewById(R.id.song_title);
         TextView songUpbeats = (TextView) convertView.findViewById(R.id.song_upbeats);
 
-        songTitle.setText(song.getTitle());
+        songTitle.setText(song.getFormattedTitle());
         songUpbeats.setText(String.valueOf(song.getUpbeats()));
 
         return convertView;

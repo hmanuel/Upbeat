@@ -5,6 +5,8 @@ package upbeat.upbeat;
  */
 public class Song {
     private String title;
+    private String formattedTitle;
+    private String artistName;
     private int songID;
     private int upbeats;
 
@@ -18,6 +20,12 @@ public class Song {
 
     public int getSongID() { return songID; }
 
+    public String getFormattedTitle() {return formattedTitle;}
+
+    public String getArtistName() {
+        return artistName;
+    }
+
     public void setSongID(int songID) {
         this.songID = songID;
     }
@@ -28,5 +36,11 @@ public class Song {
 
     public void setUpbeats(int upbeats) {
         this.upbeats = upbeats;
+    }
+
+    public void setFormattedTitle(String formattedTitle) {this.formattedTitle = formattedTitle;}
+
+    public void setArtistName(String authorName) {
+        this.artistName = authorName;
     }
 }

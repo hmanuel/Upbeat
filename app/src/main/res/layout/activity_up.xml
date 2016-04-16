@@ -40,12 +40,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Song Title Here"
-            android:textSize="30dp"/>
+            android:textSize="30dp"
+            android:id="@+id/current_song_textView" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Song Artist Here"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:id="@+id/current_artist_textView" />
         </LinearLayout>
     </LinearLayout>
 
