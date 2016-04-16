@@ -60,10 +60,13 @@ public class SongSingleton {
     public ArrayList<Song> getSongs() {
         return mSongs;
     }
+
     public Song getSong(int index) {
         return mSongs.get(index);
     }
+
     //private ArrayList<Integer> getSongIDS() {return mSongIDS;}
+
     public void addSong(Song song) {
         mSongs.add(song);
     }
@@ -85,7 +88,7 @@ public class SongSingleton {
         //AssetManager assetManager = mAppContext.getResources().getAssets();
         Field[] fields = R.raw.class.getFields();
         for(int i=0; i < fields.length-1; i++){ //because Fields has an extraneous field
-            //i + 1 because it was put in like song1, song2.... can't believe this was the prob lol
+            //i + 1 because it was put in like song1, Anaconda.... can't believe this was the prob lol
             songName = "song" + (i+1);
             song_id = mAppContext.getResources().getIdentifier(songName, "raw", mAppContext.getPackageName());
             mSongIDS.add(song_id);
