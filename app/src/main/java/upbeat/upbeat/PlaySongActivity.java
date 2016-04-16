@@ -36,6 +36,7 @@ public class PlaySongActivity extends AppCompatActivity {
         };
         mediaPlayer.setOnCompletionListener(doneListener);
 
+        /*
         playAnacondaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +69,7 @@ public class PlaySongActivity extends AppCompatActivity {
                 mediaPlayer.start();
             }
         });
+        */
     }
 
 }
