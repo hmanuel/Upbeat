@@ -22,11 +22,31 @@ public class SongSingleton {
     private SongSingleton (Context c) {
         mAppContext = c;
         mSongs = new ArrayList<>();
-        mSongIDS = new ArrayList<>(); // temporary fix. bad practice to have ids separate
-        for (int i=1; i<=20; i++) {
+        populateSongs();
+        /*for (int i=1; i<=20; i++) {
             Song song = new Song();
-            song.setTitle("Song " + i);
+            song.setTitle("Song " + i); // we have a lead with fields.getname or something
             mSongs.add(song);
+        }*/
+    }
+
+    private void populateSongs() {
+        Field[] fields = R.raw.class.getFields();
+        Log.d(TAG, "Hello world: " + fields.length);
+        Song tempSong;
+        int tempSongID;
+        int tempSongUpbeats = 0;
+        String tempSongTitle;
+        for (int i = 1; i < fields.length; i++) {
+            Log.d(TAG, fields[i].getName());
+            tempSong = new Song();
+            tempSongTitle = fields[i].getName();
+            tempSongID = mAppContext.getResources()
+                    .getIdentifier(tempSongTitle, "raw", mAppContext.getPackageName());
+            tempSong.setSongID(tempSongID);
+            tempSong.setTitle(tempSongTitle);
+            tempSong.setUpbeats(tempSongUpbeats); // this is where the cloud does cloud things
+            mSongs.add(tempSong);
         }
     }
 
@@ -43,14 +63,13 @@ public class SongSingleton {
     public Song getSong(int index) {
         return mSongs.get(index);
     }
-    public ArrayList<Integer> getSongIDS() {return mSongIDS;}
+    //private ArrayList<Integer> getSongIDS() {return mSongIDS;}
     public void addSong(Song song) {
         mSongs.add(song);
     }
 
     public void removeSong(int position) {
         mSongs.remove(position);
-        mSongIDS.remove(position);
     }
 
     public void updateSong(int position, Song song) {
@@ -59,6 +78,7 @@ public class SongSingleton {
         }
     }
 
+    /*
     public void populateSongIDS() throws IllegalAccessException, IOException {
         int song_id;
         String songName;
@@ -73,4 +93,5 @@ public class SongSingleton {
             mSongs.get(i).setSongID(song_id);
         }
     }
+    */
 }

@@ -21,7 +21,6 @@ public class UpActivity extends AppCompatActivity {
     FloatingActionButton playButton;
 
     ArrayList<Song> mSongs;
-    ArrayList<Integer> songIDS;
     SongAdapter mAdapter;
 
     MediaPlayer mediaPlayer;
@@ -39,20 +38,13 @@ public class UpActivity extends AppCompatActivity {
         firstSongStarted = false;
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
-        try {
-            s.populateSongIDS();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         mSongs = s.getSongs();
-        songIDS = new ArrayList<>();
 
         mAdapter = new SongAdapter(this, mSongs);
         mListView.setAdapter(mAdapter);
         mediaPlayer = new MediaPlayer();
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSongIDS().get(0));
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,10 +88,11 @@ public class UpActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
                 // remove top song from list
                 s.removeSong(0);
+                mAdapter.notifyDataSetChanged();
                 playButton.setImageDrawable(
                         getDrawable(R.drawable.ic_play_arrow_white_48px));
                 //start playing the top song
-                if (s.getSongIDS().size() > 0) {
+                if (s.getSongs().size() > 0) {
                     Song playNow = SongSingleton.get(getApplicationContext()).getSong(0);
                     mediaPlayer = MediaPlayer.create(getApplicationContext(), playNow.getSongID());
                     mediaPlayer.start();
