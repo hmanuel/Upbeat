@@ -1,14 +1,24 @@
 package upbeat.upbeat;
 
+import com.firebase.client.Firebase;
+
 /**
  * Created by Chandler on 4/6/16.
  */
 public class Song {
+    private Firebase reference;
     private String title;
+
+    public Firebase getReference() {
+        return reference;
+    }
+
     private String formattedTitle;
     private String artistName;
     private int songID;
     private int upbeats;
+
+    public Song() {}
 
     public String getTitle() {
         return title;

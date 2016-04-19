@@ -11,6 +11,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -31,6 +36,28 @@ public class UpActivity extends AppCompatActivity {
     boolean firstSongStarted;
     int songPosition;
 
+    private Firebase reference;
+    private Firebase individualReference;
+//    private Firebase ref3;
+//    private Firebase ref4;
+//    private Firebase ref5;
+//    private Firebase ref6;
+//    private Firebase ref7;
+//    private Firebase ref8;
+//    private Firebase ref9;
+//    private Firebase ref10;
+
+//    long counter1=0;
+//    long counter2=0;
+//    long counter3=0;
+//    long counter4=0;
+//    long counter5=0;
+//    long counter6=0;
+//    long counter7=0;
+//    long counter8=0;
+//    long counter9=0;
+//    long counter10=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +68,17 @@ public class UpActivity extends AppCompatActivity {
         firstSongStarted = false;
         currentSongTextView = (TextView) findViewById(R.id.current_song_textView);
         currentArtistTextView = (TextView) findViewById(R.id.current_artist_textView);
+
+        reference = ((UpbeatApplication) getApplication()).getMyMainReference().child("songs");
+//        ref2 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song2");
+//        ref3 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song3");
+//        ref4 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song4");
+//        ref5 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song5");
+//        ref6 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song6");
+//        ref7 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song7");
+//        ref8 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song8");
+//        ref9 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song9");
+//        ref10 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song10");
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
 
@@ -53,12 +91,31 @@ public class UpActivity extends AppCompatActivity {
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
 
+        sort();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Song song;
+                final Song song;
                 song = SongSingleton.get(getApplicationContext()).getSong(position);
-                song.setUpbeats(song.getUpbeats() + 1);
+                //song.setUpbeats(song.getUpbeats() + 1);
+                //Firebase individualNoteReference =
+                individualReference = song.getReference().child("upbeats");
+                individualReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int temp = (int) dataSnapshot.getValue();
+                        temp++;
+                        song.setUpbeats(temp);
+                        individualReference.setValue(temp);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
+                song.getUpbeats();
                 sort();
                 mAdapter.notifyDataSetChanged();
                 currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
