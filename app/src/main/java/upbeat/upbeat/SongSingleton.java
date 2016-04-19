@@ -60,12 +60,22 @@ public class SongSingleton {
             formatted = "Cocoa Butter Kisses";
         if (tempSongTitle.equals("father"))
             formatted = "Father Stretch My Hands Pt. 1";
+        if (tempSongTitle.equals("ishort"))
+            formatted = "i";
         if (tempSongTitle.equals("myhumps"))
             formatted = "My Humps";
+        if (tempSongTitle.equals("problemsshort"))
+            formatted = "f**ckin' problems";
+        if (tempSongTitle.equals("septembershort"))
+            formatted = "September";
         if (tempSongTitle.equals("threethousandfive"))
             formatted = "3005";
+        if (tempSongTitle.equals("trapqueenshort"))
+            formatted = "Trap Queen";
         if (tempSongTitle.equals("ultralight"))
             formatted = "Ultralight Beam";
+        if (tempSongTitle.equals("uptownfunkshort"))
+            formatted = "Uptown Funk";
         return formatted;
     }
 
@@ -77,12 +87,22 @@ public class SongSingleton {
             artist = "Chance the Rapper";
         if (tempSongTitle.equals("father"))
             artist = "Kanye West";
+        if (tempSongTitle.equals("ishort"))
+            artist = "Kendrick Lamar";
         if (tempSongTitle.equals("myhumps"))
             artist = "The Black Eyed Peas";
+        if (tempSongTitle.equals("problemsshort"))
+            artist = "A$AP Rocky";
+        if (tempSongTitle.equals("septembershort"))
+            artist = "Earth, Wind & Fire";
         if (tempSongTitle.equals("threethousandfive"))
             artist = "Childish Gambino";
+        if (tempSongTitle.equals("trapqueenshort"))
+            artist = "Fetty Wap";
         if (tempSongTitle.equals("ultralight"))
             artist = "Kanye West";
+        if (tempSongTitle.equals("uptownfunkshort"))
+            artist = "Bruno Mars & Mark Ronson";
         return artist;
     }
 

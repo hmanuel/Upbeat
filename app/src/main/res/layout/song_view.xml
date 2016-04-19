@@ -20,28 +20,24 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/purple_circle"
-            android:id="@+id/purple_circle"/>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/purple_circle"
+                android:id="@+id/purple_circle"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/purple_circle"
-            android:id="@+id/song_upbeats"
-            android:layout_alignRight="@+id/purple_circle"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:layout_marginRight="12dp"
-            android:textSize="20sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:id="@+id/song_upbeats" />
 
         </RelativeLayout>
 
