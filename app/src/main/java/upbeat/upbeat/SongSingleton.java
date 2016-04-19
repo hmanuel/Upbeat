@@ -65,7 +65,7 @@ public class SongSingleton {
         if (tempSongTitle.equals("myhumps"))
             formatted = "My Humps";
         if (tempSongTitle.equals("problemsshort"))
-            formatted = "f**ckin' problems";
+            formatted = "F**ckin' problems";
         if (tempSongTitle.equals("septembershort"))
             formatted = "September";
         if (tempSongTitle.equals("threethousandfive"))
