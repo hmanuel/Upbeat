@@ -45,9 +45,11 @@ public class UpActivity extends AppCompatActivity {
         final SongSingleton s = SongSingleton.get(getApplicationContext());
 
         mSongs = s.getSongs();
-
         mAdapter = new SongAdapter(this, mSongs);
         mListView.setAdapter(mAdapter);
+
+        currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
+        currentArtistTextView.setText(mSongs.get(0).getArtistName());
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
 
@@ -57,9 +59,10 @@ public class UpActivity extends AppCompatActivity {
                 Song song;
                 song = SongSingleton.get(getApplicationContext()).getSong(position);
                 song.setUpbeats(song.getUpbeats() + 1);
+                sort();
                 mAdapter.notifyDataSetChanged();
-                if (position > 0)
-                    sort(song, position, s);
+                currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
+                currentArtistTextView.setText(mSongs.get(0).getArtistName());
             }
         });
 
@@ -68,13 +71,12 @@ public class UpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
                     if (!firstSongStarted) {
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
                         mediaPlayer.start();
                         mediaPlayer.setOnCompletionListener(doneListener);
                         firstSongStarted = true;
                         playButton.setImageDrawable(
                                 getDrawable(R.drawable.ic_pause_white_48px));
-                        currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
-                        currentArtistTextView.setText(mSongs.get(0).getArtistName());
                     } else {
                         mediaPlayer.seekTo(songPosition);
                         mediaPlayer.start();
@@ -92,7 +94,7 @@ public class UpActivity extends AppCompatActivity {
         doneListener = new MediaPlayer.OnCompletionListener() {
 
             public void onCompletion(MediaPlayer mp) {
-                Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
                 // remove top song from list
                 s.removeSong(0);
                 mAdapter.notifyDataSetChanged();
@@ -126,8 +128,21 @@ public class UpActivity extends AppCompatActivity {
         }
     }*/
 
-    public void sort(Song song, int position, SongSingleton s) {
-        Song song2 = SongSingleton.get(getApplicationContext()).getSong(position - 1);
+    private void sort() {
+        Song swapMe;
+        for (int i = 0; i < mSongs.size(); i++ ) {
+            for (int j = i; j< mSongs.size(); j++) {
+                if (mSongs.get(i).getUpbeats() < mSongs.get(j).getUpbeats()) {
+                    swapMe = mSongs.get(i);
+                    mSongs.set(i, mSongs.get(j));
+                    mSongs.set(j, swapMe);
+                }
+            }
+        }
+
+        mAdapter.notifyDataSetChanged();
+
+        /*Song song2 = SongSingleton.get(getApplicationContext()).getSong(position - 1);
         while (song.getUpbeats() > song2.getUpbeats()) {
             s.updateSong(position - 1, song);
             s.updateSong(position, song2);
@@ -136,8 +151,8 @@ public class UpActivity extends AppCompatActivity {
                 song2 = SongSingleton.get(getApplicationContext()).getSong(position - 1);
             else
                 break;
-        }
-        mAdapter.notifyDataSetChanged();
+        }*/
+
     }
 
 }
