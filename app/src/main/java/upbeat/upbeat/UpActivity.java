@@ -58,7 +58,7 @@ public class UpActivity extends AppCompatActivity {
                 song = SongSingleton.get(getApplicationContext()).getSong(position);
                 song.setUpbeats(song.getUpbeats() + 1);
                 mAdapter.notifyDataSetChanged();
-                if(position > 0)
+                if (position > 0)
                     sort(song, position, s);
             }
         });
@@ -117,8 +117,8 @@ public class UpActivity extends AppCompatActivity {
 
     /*private void populateSongIDS() throws IllegalAccessException {
         int song_id;
-        Field[] fields=R.raw.class.getFields();
-        for(int i=0; i < fields.length; i++){
+        Field[] fields = R.raw.class.getFields();
+        for (int i = 0; i < fields.length; i++) {
             songIDS.add(fields[i].getInt(fields[i]));
             song_id = fields[i].getInt(fields[i]);
             Log.d(TAG, "Song ID: " + String.valueOf(songIDS.get(i)));
@@ -127,13 +127,13 @@ public class UpActivity extends AppCompatActivity {
     }*/
 
     public void sort(Song song, int position, SongSingleton s) {
-        Song song2 = SongSingleton.get(getApplicationContext()).getSong(position-1);
-        while (song.getUpbeats()>song2.getUpbeats()) {
-            s.updateSong(position-1, song);
+        Song song2 = SongSingleton.get(getApplicationContext()).getSong(position - 1);
+        while (song.getUpbeats() > song2.getUpbeats()) {
+            s.updateSong(position - 1, song);
             s.updateSong(position, song2);
             position = position - 1;
             if (position - 1 >= 0)
-                song2 = SongSingleton.get(getApplicationContext()).getSong(position-1);
+                song2 = SongSingleton.get(getApplicationContext()).getSong(position - 1);
             else
                 break;
         }

@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_play_arrow_white_48px"
-            app:backgroundTint="@color/colorPrimary"
+            app:backgroundTint="#50077C"
             android:layout_marginRight="10dp"
             android:id="@+id/play_button"/>
         <LinearLayout
@@ -56,3 +56,4 @@
         android:layout_height="wrap_content"
         android:id="@+id/songs_list"/>
 </LinearLayout>
+
