@@ -1,8 +1,11 @@
 package upbeat.upbeat;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
+
+import com.firebase.client.Firebase;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -12,6 +15,10 @@ import java.util.ArrayList;
  * Created by Chandler on 4/6/16.
  */
 public class SongSingleton {
+    private Firebase mainReference;
+    private Firebase deleteReference;
+    private Firebase songsReference;
+    private Firebase individualReference;
     private ArrayList<Song> mSongs;
     private ArrayList<Integer> mSongIDS;
     private Context mAppContext;
@@ -26,6 +33,11 @@ public class SongSingleton {
     }
 
     private void populateSongs() {
+        String key;
+        mainReference = new Firebase("https://dazzling-fire-2122.firebaseio.com");
+        deleteReference = new Firebase("https://dazzling-fire-2122.firebaseio.com/songs");
+        deleteReference.removeValue();
+        songsReference = mainReference.child("songs");
         Field[] fields = R.raw.class.getFields();
         Log.d(TAG, "Hello world: " + fields.length);
         Song tempSong;
@@ -48,6 +60,14 @@ public class SongSingleton {
             tempSong.setUpbeats(tempSongUpbeats); // this is where the cloud does cloud things
             tempSong.setFormattedTitle(tempSongFormattedTitle);
             tempSong.setArtistName(tempSongArtist);
+            //mSongs.add(tempSong);
+            //key =
+//          individualReference.push().setValue(tempSong);
+            individualReference = songsReference.push();
+            individualReference.setValue(tempSong);
+            key = individualReference.getKey();
+            //tempSong.setReference(individualReference.child("upbeats"));
+            tempSong.setKey(key);
             mSongs.add(tempSong);
         }
     }
@@ -111,6 +131,10 @@ public class SongSingleton {
             sSongs = new SongSingleton(c.getApplicationContext());
         }
         return sSongs;
+    }
+
+    public Firebase getReference(Song song) {
+        return individualReference;
     }
 
     public ArrayList<Song> getSongs() {

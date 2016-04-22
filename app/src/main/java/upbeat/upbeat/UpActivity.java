@@ -11,6 +11,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -31,6 +36,13 @@ public class UpActivity extends AppCompatActivity {
     boolean firstSongStarted;
     int songPosition;
 
+    private long temp;
+
+    private Firebase reference;
+    private Firebase individualReference;
+    private Firebase listenerReference;
+    String key;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +53,9 @@ public class UpActivity extends AppCompatActivity {
         firstSongStarted = false;
         currentSongTextView = (TextView) findViewById(R.id.current_song_textView);
         currentArtistTextView = (TextView) findViewById(R.id.current_artist_textView);
+
+        reference = ((UpbeatApplication) getApplication()).getMyMainReference().child("songs");
+        listenerReference = ((UpbeatApplication) getApplication()).getMyMainReference().child("listener");
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
 
@@ -53,12 +68,34 @@ public class UpActivity extends AppCompatActivity {
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
 
+        sort();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Song song;
+                final Song song;
                 song = SongSingleton.get(getApplicationContext()).getSong(position);
-                song.setUpbeats(song.getUpbeats() + 1);
+                //song.setUpbeats(song.getUpbeats() + 1);
+                key = song.getKey();
+                //Log.d(TAG, "key is: " + key);
+                individualReference = reference.child(key).child("upbeats");
+                individualReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        temp = (Long) dataSnapshot.getValue();
+                        temp++;
+                        song.setUpbeats(temp);
+                        individualReference.setValue(temp);
+                        sort();
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
+                song.getUpbeats();
                 sort();
                 mAdapter.notifyDataSetChanged();
                 if (!firstSongStarted) {
@@ -68,10 +105,27 @@ public class UpActivity extends AppCompatActivity {
             }
         });
 
+
+        // for second version!
+//        listenerReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (((Long) dataSnapshot.getValue()==1)) {
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+
         playButton.setOnClickListener(new View.OnClickListener() { //only starts it, doesn't play / pause
             @Override
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
+                    listenerReference.setValue(1); // tell Firebase that the song is playing
                     if (!firstSongStarted) {
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
                         mediaPlayer.start();
@@ -91,6 +145,7 @@ public class UpActivity extends AppCompatActivity {
                                 getDrawable(R.drawable.ic_pause_white_48px));
                     }
                 } else if (mediaPlayer.isPlaying()) {
+                    listenerReference.setValue(0); // tell Firebase that the song is paused
                     mediaPlayer.pause();
                     songPosition = mediaPlayer.getCurrentPosition();
                     playButton.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_white_48px));

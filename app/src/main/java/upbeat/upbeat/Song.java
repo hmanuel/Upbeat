@@ -1,20 +1,33 @@
 package upbeat.upbeat;
 
+import com.firebase.client.Firebase;
+
 /**
  * Created by Chandler on 4/6/16.
  */
 public class Song {
+    private String key;
     private String title;
     private String formattedTitle;
     private String artistName;
     private int songID;
-    private int upbeats;
+    private long upbeats;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Song() {}
 
     public String getTitle() {
         return title;
     }
 
-    public int getUpbeats() {
+    public long getUpbeats() {
         return upbeats;
     }
 
@@ -34,7 +47,7 @@ public class Song {
         this.title = title;
     }
 
-    public void setUpbeats(int upbeats) {
+    public void setUpbeats(long upbeats) {
         this.upbeats = upbeats;
     }
 
