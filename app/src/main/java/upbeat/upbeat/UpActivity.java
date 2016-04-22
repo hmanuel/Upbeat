@@ -36,27 +36,12 @@ public class UpActivity extends AppCompatActivity {
     boolean firstSongStarted;
     int songPosition;
 
+    private long temp;
+
     private Firebase reference;
     private Firebase individualReference;
-//    private Firebase ref3;
-//    private Firebase ref4;
-//    private Firebase ref5;
-//    private Firebase ref6;
-//    private Firebase ref7;
-//    private Firebase ref8;
-//    private Firebase ref9;
-//    private Firebase ref10;
-
-//    long counter1=0;
-//    long counter2=0;
-//    long counter3=0;
-//    long counter4=0;
-//    long counter5=0;
-//    long counter6=0;
-//    long counter7=0;
-//    long counter8=0;
-//    long counter9=0;
-//    long counter10=0;
+    private Firebase listenerReference;
+    String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +55,7 @@ public class UpActivity extends AppCompatActivity {
         currentArtistTextView = (TextView) findViewById(R.id.current_artist_textView);
 
         reference = ((UpbeatApplication) getApplication()).getMyMainReference().child("songs");
-//        ref2 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song2");
-//        ref3 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song3");
-//        ref4 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song4");
-//        ref5 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song5");
-//        ref6 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song6");
-//        ref7 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song7");
-//        ref8 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song8");
-//        ref9 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song9");
-//        ref10 = ((UpbeatApplication) getApplication()).getMyMainReference().child("upbeats").child("song10");
+        listenerReference = ((UpbeatApplication) getApplication()).getMyMainReference().child("listener");
 
         final SongSingleton s = SongSingleton.get(getApplicationContext());
 
@@ -98,15 +75,18 @@ public class UpActivity extends AppCompatActivity {
                 final Song song;
                 song = SongSingleton.get(getApplicationContext()).getSong(position);
                 //song.setUpbeats(song.getUpbeats() + 1);
-                //Firebase individualNoteReference =
-                individualReference = song.getReference().child("upbeats");
+                key = song.getKey();
+                //Log.d(TAG, "key is: " + key);
+                individualReference = reference.child(key).child("upbeats");
                 individualReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        int temp = (int) dataSnapshot.getValue();
+                        temp = (Long) dataSnapshot.getValue();
                         temp++;
                         song.setUpbeats(temp);
                         individualReference.setValue(temp);
+                        sort();
+                        mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -123,10 +103,27 @@ public class UpActivity extends AppCompatActivity {
             }
         });
 
+
+        // for second version!
+//        listenerReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (((Long) dataSnapshot.getValue()==1)) {
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+
         playButton.setOnClickListener(new View.OnClickListener() { //only starts it, doesn't play / pause
             @Override
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
+                    listenerReference.setValue(1); // tell Firebase that the song is playing
                     if (!firstSongStarted) {
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
                         mediaPlayer.start();
@@ -141,6 +138,7 @@ public class UpActivity extends AppCompatActivity {
                                 getDrawable(R.drawable.ic_pause_white_48px));
                     }
                 } else if (mediaPlayer.isPlaying()) {
+                    listenerReference.setValue(0); // tell Firebase that the song is paused
                     mediaPlayer.pause();
                     songPosition = mediaPlayer.getCurrentPosition();
                     playButton.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_white_48px));

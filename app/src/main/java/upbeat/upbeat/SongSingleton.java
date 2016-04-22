@@ -16,6 +16,8 @@ import java.util.ArrayList;
  */
 public class SongSingleton {
     private Firebase mainReference;
+    private Firebase deleteReference;
+    private Firebase songsReference;
     private Firebase individualReference;
     private ArrayList<Song> mSongs;
     private ArrayList<Integer> mSongIDS;
@@ -31,8 +33,11 @@ public class SongSingleton {
     }
 
     private void populateSongs() {
+        String key;
         mainReference = new Firebase("https://dazzling-fire-2122.firebaseio.com");
-        individualReference = mainReference.child("songs");
+        deleteReference = new Firebase("https://dazzling-fire-2122.firebaseio.com/songs");
+        deleteReference.removeValue();
+        songsReference = mainReference.child("songs");
         Field[] fields = R.raw.class.getFields();
         Log.d(TAG, "Hello world: " + fields.length);
         Song tempSong;
@@ -55,8 +60,15 @@ public class SongSingleton {
             tempSong.setUpbeats(tempSongUpbeats); // this is where the cloud does cloud things
             tempSong.setFormattedTitle(tempSongFormattedTitle);
             tempSong.setArtistName(tempSongArtist);
+            //mSongs.add(tempSong);
+            //key =
+//          individualReference.push().setValue(tempSong);
+            individualReference = songsReference.push();
+            individualReference.setValue(tempSong);
+            key = individualReference.getKey();
+            //tempSong.setReference(individualReference.child("upbeats"));
+            tempSong.setKey(key);
             mSongs.add(tempSong);
-            individualReference.push().setValue(tempSong);
         }
     }
 
