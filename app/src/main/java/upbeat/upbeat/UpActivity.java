@@ -61,8 +61,10 @@ public class UpActivity extends AppCompatActivity {
                 song.setUpbeats(song.getUpbeats() + 1);
                 sort();
                 mAdapter.notifyDataSetChanged();
-                currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
-                currentArtistTextView.setText(mSongs.get(0).getArtistName());
+                if (!firstSongStarted) {
+                    currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
+                    currentArtistTextView.setText(mSongs.get(0).getArtistName());
+                }
             }
         });
 
@@ -77,6 +79,11 @@ public class UpActivity extends AppCompatActivity {
                         firstSongStarted = true;
                         playButton.setImageDrawable(
                                 getDrawable(R.drawable.ic_pause_white_48px));
+                        currentSongTextView.setText(mSongs.get(0).getFormattedTitle());
+                        currentArtistTextView.setText(mSongs.get(0).getArtistName());
+                        s.removeSong(0);
+                        mAdapter.notifyDataSetChanged();
+
                     } else {
                         mediaPlayer.seekTo(songPosition);
                         mediaPlayer.start();
@@ -96,8 +103,6 @@ public class UpActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mp) {
                 // Toast.makeText(getApplicationContext(), "Media Completed", Toast.LENGTH_SHORT).show();
                 // remove top song from list
-                s.removeSong(0);
-                mAdapter.notifyDataSetChanged();
                 playButton.setImageDrawable(
                         getDrawable(R.drawable.ic_play_arrow_white_48px));
                 //start playing the top song
@@ -112,6 +117,8 @@ public class UpActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                     currentSongTextView.setText(playNow.getFormattedTitle());
                     currentArtistTextView.setText(playNow.getArtistName());
+                    s.removeSong(0);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         };
