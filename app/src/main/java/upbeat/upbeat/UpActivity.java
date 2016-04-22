@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -19,6 +20,7 @@ import com.firebase.client.ValueEventListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class UpActivity extends AppCompatActivity {
 
@@ -67,6 +69,64 @@ public class UpActivity extends AppCompatActivity {
         currentArtistTextView.setText(mSongs.get(0).getArtistName());
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(getApplicationContext(), s.getSong(0).getSongID());
+
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//               // for (int i=0; mSongs.)
+//
+//
+//                dataSnapshot.getValue();
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+        
+
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Song song1 = dataSnapshot.getValue(Song.class);
+                //song.getUpbeats();
+
+                Log.d(TAG, "key is: " + dataSnapshot.getKey());
+
+                Song song2 = SongSingleton.get(getApplicationContext()).getSongFromKey(dataSnapshot.getKey());
+                if(song2 == null)
+                    Log.d(TAG, "SONG IS NULL");
+                song2.setUpbeats(song1.getUpbeats());
+                sort();
+                mAdapter.notifyDataSetChanged();
+
+
+
+//                reference.child(dataSnapshot.getKey()).child("upbeats").setValue(song.getUpbeats());
+//                Log.d(TAG, "upbeats is: " + song.getUpbeats());
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         sort();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

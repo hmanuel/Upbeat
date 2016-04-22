@@ -3,6 +3,7 @@ package upbeat.upbeat;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.firebase.client.Firebase;
@@ -10,6 +11,11 @@ import com.firebase.client.Firebase;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Chandler on 4/6/16.
@@ -23,6 +29,7 @@ public class SongSingleton {
     private ArrayList<Integer> mSongIDS;
     private Context mAppContext;
     private static SongSingleton sSongs;
+    private HashMap<String, Song> mKeyMap;
 
     public static final String TAG = UpActivity.class.getSimpleName();
 
@@ -34,6 +41,7 @@ public class SongSingleton {
 
     private void populateSongs() {
         String key;
+        mKeyMap = new HashMap<String, Song>();
         mainReference = new Firebase("https://dazzling-fire-2122.firebaseio.com");
         deleteReference = new Firebase("https://dazzling-fire-2122.firebaseio.com/songs");
         deleteReference.removeValue();
@@ -69,6 +77,7 @@ public class SongSingleton {
             //tempSong.setReference(individualReference.child("upbeats"));
             tempSong.setKey(key);
             mSongs.add(tempSong);
+            mKeyMap.put(key, tempSong);
         }
     }
 
@@ -85,7 +94,7 @@ public class SongSingleton {
         if (tempSongTitle.equals("myhumps"))
             formatted = "My Humps";
         if (tempSongTitle.equals("problemsshort"))
-            formatted = "F**ckin' problems";
+            formatted = "F**ckin' Problems";
         if (tempSongTitle.equals("septembershort"))
             formatted = "September";
         if (tempSongTitle.equals("threethousandfive"))
@@ -143,6 +152,10 @@ public class SongSingleton {
 
     public Song getSong(int index) {
         return mSongs.get(index);
+    }
+
+    public Song getSongFromKey(String key) {
+        return mKeyMap.get(key);
     }
 
     //private ArrayList<Integer> getSongIDS() {return mSongIDS;}
